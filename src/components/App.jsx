@@ -15,7 +15,6 @@ export const App = () => {
   const [firstRenderFlag, setFlag] = useState(true);
 
   const [filter, setFilter] = useState('');
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (firstRenderFlag) {
@@ -50,12 +49,14 @@ export const App = () => {
     } else {
       contactsLists.push({ id, name, number });
     }
-
-    setContacts(contactsLists);
+    setContacts(prevContacts => [...prevContacts, { id, name, number }]);
+    // setContacts(contactsLists);
   };
 
   const handleDelete = e => {
-    setContacts(contacts.filter(contact => contact.id !== e));
+    setContacts(
+      contacts.filter(prevState => ({ contact: prevState.contact.id !== e }))
+    );
   };
 
   const getFilteredContacts = () => {
