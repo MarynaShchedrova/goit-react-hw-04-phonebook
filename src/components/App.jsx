@@ -12,31 +12,36 @@ export const App = () => {
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ]);
 
-  const [firstRenderFlag, setFlag] = useState(true);
+  // const [firstRenderFlag, setFlag] = useState(true);
 
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    if (firstRenderFlag) {
-      const contactsFromLocalStorage = localStorage.getItem('contactList');
+    JSON.parse(localStorage.getItem('contactList'));
+    localStorage.setItem('contactList', JSON.stringify(contacts));
+  }, [contacts]);
 
-      if (contactsFromLocalStorage !== 'undefined') {
-        const parsedContacts = JSON.parse(contactsFromLocalStorage);
+  // useEffect(() => {
+  //   if (firstRenderFlag) {
+  //     const contactsFromLocalStorage = localStorage.getItem('contactList');
 
-        if (parsedContacts) {
-          setContacts(parsedContacts);
-        }
-      }
-      setFlag(false);
-    } else {
-      localStorage.setItem('contactList', JSON.stringify(contacts));
-    }
-  }, [contacts, firstRenderFlag]);
+  //     if (contactsFromLocalStorage !== 'undefined') {
+  //       const parsedContacts = JSON.parse(contactsFromLocalStorage);
 
-  const handleChange = e => {
+  //       if (parsedContacts) {
+  //         setContacts(parsedContacts);
+  //       }
+  //     }
+  //     setFlag(false);
+  //   } else {
+  //     localStorage.setItem('contactList', JSON.stringify(contacts));
+  //   }
+  // }, [contacts, firstRenderFlag]);
+
+  function handleChange(e) {
     const { value } = e.target;
     setFilter(value);
-  };
+  }
 
   const handleSubmit = e => {
     const id = nanoid();
@@ -54,9 +59,7 @@ export const App = () => {
   };
 
   const handleDelete = e => {
-    setContacts(
-      contacts.filter(prevState => ({ contact: prevState.contact.id !== e }))
-    );
+    setContacts(contacts.filter(contact => contact.id !== e));
   };
 
   const getFilteredContacts = () => {
